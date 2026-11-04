@@ -372,6 +372,35 @@ public:
         }
     }
 
+    //Used to generate the output file using the given filename.
+    void createOutputFile(string filename){
+
+        ofstream outputFile(filename);
+
+        if(outputFile.is_open()){
+
+            outputFile << "Tree Analysis:\n\n\n\n";
+
+            //Print: tree properties, then binary properties, then finally the visualization
+
+            //Tree Properties section
+            outputFile << "Tree Properties:\n\n";
+            outputFile << "Root Node: " << root->content <<endl;
+            outputFile << "Internal Node Count: " << getInternalCount() <<endl;
+            outputFile << "Leaf Node Count: " << getLeafCount() <<endl;
+            outputFile << "Tree Height: " << getHeight() <<endl;
+            outputFile << "Internal Nodes: " << endl; printPreorderNodes(root, false, outputFile);
+            outputFile << "External Nodes: " << endl; printPreorderNodes(root, true, outputFile);
+
+            //ADD: binary properties and visualization
+
+        }
+        else{
+            cout<< "Can't create an output file!" <<endl;
+            return;
+        }
+    }
+
     int getLeafCount() {
         return countLeaves(root);
     }
