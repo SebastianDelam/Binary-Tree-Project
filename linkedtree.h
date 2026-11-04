@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 struct Node {
@@ -19,6 +21,17 @@ struct Node {
         parent = nullptr;
     }
 };
+
+//Primitive version of a node made to easily store data from a tree file
+struct tfNode{
+    string content;
+    string label;
+    int position;
+    int Nodelevel;
+};
+
+vector<string> lineSplit(string text);
+void preorderSort(vector<tfNode>& nodes);
 
 class LinkedTree {
 private:
@@ -290,6 +303,75 @@ public:
         path.push_back(newNode);
     }
 
+    //Requires a file name as input and adds its nodes to an empty tree.
+    //Will return False if an issue occurred, and True if everything succeeds.
+    bool treeFileLoad(string treefile){
+
+        ifstream fname(treefile);
+
+        if(fname.is_open()){
+
+            vector<tfNode> nodes;
+            string currentLine;
+            int lineNum = 1;
+
+            //creating the root node first
+            getline(fname, currentLine);
+            vector<string>rootNodeData = lineSplit(currentLine);
+
+            //check if root node has 3 fields
+            if(rootNodeData.size() != 3){
+                cout<< "Root format is invalid!" <<endl;
+                return false;
+            }
+
+            int rootNodeLevel = stoi(rootNodeData[0]);
+            int rootNodePosition = stoi(rootNodeData[1]);
+            string rootNodeLabel = rootNodeData[2];
+
+            //check if root node is level 0
+            if(rootNodeLevel != 0){
+                cout<< "Root node must be at level 0!" <<endl;
+                return false;
+            }
+            addNode(rootNodePosition, rootNodeLevel, "", rootNodeLabel);
+            lineNum +=1;
+
+            //adding the rest of the nodes
+            while(getline(fname, currentLine)){
+
+                vector<string>nodeData = lineSplit(currentLine);
+
+                //check if the current line has 4 fields
+                if(nodeData.size() != 4){
+                    cout<< "Invalid line format at line #" << lineNum << "!" <<endl;
+                    return false;
+                }
+
+                tfNode node;
+
+                node.Nodelevel = stoi(nodeData[0]);
+                node.position = stoi(nodeData[1]);
+                node.label = nodeData[2];
+                node.content = nodeData[3];
+
+                nodes.push_back(node);
+                lineNum+=1;
+            }
+
+            preorderSort(nodes);
+
+            for(tfNode node : nodes){
+                addNode(node.position, node.Nodelevel, node.label, node.content);
+            }
+            return true;
+        }
+        else{
+            cout<< "Can't open the file! Does it exist in the current directory?" <<endl;
+            return false;
+        }
+    }
+
     int getLeafCount() {
         return countLeaves(root);
     }
@@ -333,3 +415,36 @@ public:
         return searchNode(root, pos);
     }
 };
+
+//Used to separate tree file lines, used for extracting node data
+vector<string> lineSplit(string text){
+
+    vector<string> tfLine;
+    string data;
+    stringstream ss(text);
+
+    while(getline(ss, data, '\t')){
+        tfLine.push_back(data);
+    }
+
+    return tfLine;
+}
+
+//Performs preorder sorting a vector of tree file nodes using selection sort (ooooohhhh buzzword buzzword SELECTION SORT) 
+void preorderSort(vector<tfNode>& nodes){
+    for(int i=0; i < nodes.size()-1; i++){
+
+        int imin = i;
+
+        for(int j=i+1; j < nodes.size(); j++){
+
+            if(nodes[j].position < nodes[imin].position){
+                imin=j;
+            }            
+        }
+
+        tfNode temp = nodes[i];
+        nodes[i] = nodes[imin];
+        nodes[imin] = temp;
+    }
+}
