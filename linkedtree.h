@@ -30,7 +30,7 @@ struct tfNode{
     int Nodelevel;
 };
 
-vector<string> lineSplit(string text);
+vector<string> lineSplit(string text, bool isroot);
 void preorderSort(vector<tfNode>& nodes);
 
 class LinkedTree {
@@ -317,7 +317,7 @@ public:
 
             //creating the root node first
             getline(fname, currentLine);
-            vector<string>rootNodeData = lineSplit(currentLine);
+            vector<string>rootNodeData = lineSplit(currentLine, true);
 
             //check if root node has 3 fields
             if(rootNodeData.size() != 3){
@@ -340,7 +340,7 @@ public:
             //adding the rest of the nodes
             while(getline(fname, currentLine)){
 
-                vector<string>nodeData = lineSplit(currentLine);
+                vector<string>nodeData = lineSplit(currentLine, false);
 
                 //check if the current line has 4 fields
                 if(nodeData.size() != 4){
@@ -464,14 +464,31 @@ public:
 };
 
 //Used to separate tree file lines, used for extracting node data
-vector<string> lineSplit(string text){
+vector<string> lineSplit(string text, bool isroot){
 
     vector<string> tfLine;
     string data;
     stringstream ss(text);
 
-    while(getline(ss, data, '\t')){
+    //executes on root line
+    if(isroot){
+        while(getline(ss, data, '\t')){
+            tfLine.push_back(data);
+        }
+    }
+    //executes after root line
+    else{
+        getline(ss, data, '\t');
         tfLine.push_back(data);
+
+        string remaining;
+        getline(ss, remaining);
+
+        stringstream ss2(remaining);
+
+        while (getline(ss2, data, '\t')){
+            tfLine.push_back(data);
+        }
     }
 
     return tfLine;
