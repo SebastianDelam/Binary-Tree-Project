@@ -321,7 +321,7 @@ public:
 
             //check if root node has 3 fields
             if(rootNodeData.size() != 3){
-                cout<< "Root format is invalid!" <<endl;
+                cout<< "Root format is invalid! Make sure you separate values by tabs, not spaces." <<endl;
                 return false;
             }
 
