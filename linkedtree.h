@@ -321,7 +321,7 @@ public:
 
             //check if root node has 3 fields
             if(rootNodeData.size() != 3){
-                cout<< "Root format is invalid! Make sure you separate values by tabs, not spaces." <<endl;
+                cout<< "Root format is invalid! Make sure you separate all fields with a tab, not spaces." <<endl;
                 return false;
             }
 
@@ -344,7 +344,7 @@ public:
 
                 //check if the current line has 4 fields
                 if(nodeData.size() != 4){
-                    cout<< "Invalid line format at line #" << lineNum << "!" <<endl;
+                    cout<< "Invalid line format at line #" << lineNum << "! Make sure each field is separated by a tab character." <<endl;
                     return false;
                 }
 
