@@ -38,24 +38,24 @@ if (!tree.treeFileLoad(filename)) {
 
     if (tree.isBinary()) {
         cout << "Proper Tree: " << (tree.isProper() ? "Yes" : "No") << endl;
-    }
+    
 
-    if (tree.isPerfect()) {
-    cout << "Perfect Tree: Yes" << endl;
-    }
+        if (tree.isPerfect()) {
+        cout << "Perfect Tree: Yes" << endl;
+        }
 
-    else {
-        cout << "Perfect Tree: No" << endl;
-    }
+        else {
+            cout << "Perfect Tree: No" << endl;
+        }
 
-    if (tree.isBalanced()) {
-        cout << "Balanced Tree: Yes" << endl;
-    }
+        if (tree.isBalanced()) {
+            cout << "Balanced Tree: Yes" << endl;
+        }
 
-    else {
-        cout << "Balanced Tree: No" << endl;
+        else {
+            cout << "Balanced Tree: No" << endl;
+        }
     }
-
 
 
     string input;
