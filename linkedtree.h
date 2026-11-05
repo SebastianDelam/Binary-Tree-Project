@@ -373,9 +373,9 @@ public:
     }
 
     //Used to generate the output file using the given filename.
-    void createOutputFile(string filename){
+    void createOutputFile(){
 
-        ofstream outputFile(filename);
+        ofstream outputFile("about_tree.txt");
 
         if(outputFile.is_open()){
 
@@ -393,6 +393,24 @@ public:
             outputFile << "External Nodes: " << endl; printPreorderNodes(root, true, outputFile);
 
             //ADD: binary properties and visualization
+            outputFile << "Binary Properties:\n\n\n\n";
+            if(isBinary()){
+            //proper = 0 or 2 children per parent    
+            outputFile << "Binary Tree: Yes" <<endl;    
+            if(isProper()){
+                outputFile << "Proper Tree: Yes" <<endl;
+            } else outputFile << "Proper Tree: No" <<endl;
+            //every internal node has 2 children
+            if(isPerfect()){
+                outputFile << "Perfect Tree: Yes" <<endl;
+            } else outputFile << "Perfect Tree: No" <<endl;
+            //heights of left and right differ by at most 1
+            if(isBalanced()){
+                outputFile << "Balanced Tree: Yes" <<endl;
+            } else outputFile << "Balanced Tree: No" <<endl;
+        } else outputFile << "Binary tree: No" <<endl;
+            outputFile << "Tree Visualization:\n\n\n\n";
+            printTree(outputFile);
 
         }
         else{
